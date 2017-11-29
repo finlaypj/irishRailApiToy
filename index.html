@@ -85,6 +85,13 @@
     </div>
   </div>
 </div>
+<div class="container">
+  <div class="row">
+    <canvas id="myCanvas" width="800" height="4000" style="border:1px solid #d3d3d3;">
+Your browser does not support the HTML5 canvas tag.</canvas>
+  </div>
+</div>
+
 
 
 </div>
@@ -92,6 +99,26 @@
 <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
 <script type='text/javascript'>
+
+var width = 800;
+var height = 4000;
+
+function drawCircles(ctx , stations)
+{
+  len = stations.length;
+  console.log(len);
+  dist_per_station = (height - 200)/(len - 1) ;
+  space = 100;
+  $.each(stations, function(index , value){
+    console.log(dist_per_station);
+    ctx.beginPath();
+    ctx.arc(400,space,10,0,2*Math.PI);
+    ctx.stroke();
+    ctx.font = "25px Arial";
+    ctx.fillText(value,430,space + 5);
+    space = space + dist_per_station;
+  })
+}
 
 
 function populateStations(stations)
@@ -166,14 +193,27 @@ $("ul").on("click", "li.stationSelector", function(){
 });
 
 $( document ).ready(function() {
+  var c = document.getElementById("myCanvas");
+  var ctx = c.getContext("2d");
+  ctx.beginPath();
+  ctx.lineTo(400, 100);
+  ctx.lineTo(400, 3900);
+  ctx.stroke();
+
   $.get("/api/stations", function(data, status){
       stations = data;
+      drawCircles(ctx, stations);
       return populateStations(stations);
   });
 });
 
 
 
+
+
+
 </script>
+
+
 </body>
 </html>
